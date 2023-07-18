@@ -1,6 +1,6 @@
 {
     "name": "ts-plugin-helper",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "license": "OSL-3.0",
     "main": "src/index.ts",
     "scandipwa": {
@@ -9,5 +9,8 @@
     "eslintConfig": {
         "extends": "@scandipwa"
     },
-    "readme": "ScandiPWA Typescript helper for plugins"
+    "readme": "ScandiPWA Typescript helper for plugins",
+    "repository": {
+        "url": "https://github.com/Andrii-Antoniuk/ts-plugin-helper"
+    }
 }

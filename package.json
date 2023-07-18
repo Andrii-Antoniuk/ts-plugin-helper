@@ -3,9 +3,6 @@
     "version": "1.0.3",
     "license": "OSL-3.0",
     "main": "src/index.ts",
-    "scandipwa": {
-        "type": "extension"
-    },
     "eslintConfig": {
         "extends": "@scandipwa"
     },

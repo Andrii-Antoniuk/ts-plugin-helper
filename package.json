@@ -1,0 +1,13 @@
+{
+    "name": "ts-plugin-helper",
+    "version": "1.0.0",
+    "license": "OSL-3.0",
+    "main": "src/index.ts",
+    "scandipwa": {
+        "type": "extension"
+    },
+    "eslintConfig": {
+        "extends": "@scandipwa"
+    },
+    "readme": "ScandiPWA Typescript helper for plugins"
+}

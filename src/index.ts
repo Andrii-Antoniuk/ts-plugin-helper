@@ -3,7 +3,26 @@
  *
  * You can pass 3rd argument to the function in order you want to override the return type
  * @see https://docs.mosaic.js.org/develop-an-extension/plugins#member-name
+ *
+ * @example
+ *
+ * const myPluginToMethod: GetTypesFromMember<ClassToWhichYouPlugTo, 'nameOfMethodYouPlugTo',"banana">>
+    = (args, callback, instance) => {
+        // Do some code
+        callback(...args); // No error about callback is not callable!
+
+        return "banana"; // It will accept only banana as return type, since you overrode it
+    }
+
+ * @example
+    const myPluginToProperty: GetTypesFromMember<ClassToWhichYouPlugTo, 'nameOfPropertyYouPlugTo', {myStuff: number}>
+    = (member, instance) => {
+        const {someStuff = 42} = member; // You will get a type safety on accessing properties and methods on member
+
+        return {myStuff: someStuff}; //It will accept only your type as return type, since you overrode it
+    }
  */
+
 export type GetTypesFromMember<
     Inst,
     PropOrMethod extends keyof Inst,
@@ -28,11 +47,25 @@ export type GetTypesFromMemberP<
     Inst,
     P extends keyof Inst,
     R = Inst[P],
-> = (member: R, instance: Inst) => R;
+> = (member: Inst[P], instance: Inst) => R;
 /**
  * Gets the type for function
  *
- * You can pass 3rd argument to the function in order you want to override the return type
+ * You can pass:
+ * 2nd argument to the function in order you want to add context of it
+ * and
+ * 3rd argument to override the return type
+ * @example
+ * const myPluginToFunc: GetTypesFromMember<typeof functionYouPlugTo,
+ *  context = unknown, // if you want to use this keyword.
+ * "apple">>
+    = (args, callback, instance) => {
+        // Do some code
+        callback(...args); // No error about callback is not callable!
+
+        return "apple"; // It will accept only apple as return type, since you overrode it
+    }
+
  * @see https://docs.mosaic.js.org/develop-an-extension/plugins#member-name
  */
 export type GetTypesFromFunction<

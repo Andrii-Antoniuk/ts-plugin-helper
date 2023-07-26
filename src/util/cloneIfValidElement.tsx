@@ -13,8 +13,8 @@ interface Options<T> {
      */
     newProps?: T;
     /**
-     * Any valid ReactElement
-     * @see
+     * Any valid ReactNode
+     * @see https://react.dev/reference/react/isValidElement#react-elements-vs-react-nodes
      */
     newChildren?: ReactElement;
     mergeChildren?: boolean;
@@ -71,7 +71,7 @@ function getChildren(
     newChildren: ReactElement,
     prevChildren: ReactElement,
     mergeChildren: boolean,
-): ReactElement{
+): ReactElement {
     const isValidNode = isReactNode(newChildren);
 
     if (!newChildren || !isValidNode){

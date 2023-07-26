@@ -1,0 +1,2 @@
+export const DEFAULT_MAX_TRY_COUNT = 10;
+export const DEFAULT_TRY_INTERVAL_MS = 150;

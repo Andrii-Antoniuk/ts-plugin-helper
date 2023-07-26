@@ -1,6 +1,6 @@
 {
     "name": "ts-plugin-helper",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "license": "OSL-3.0",
     "main": "src/index.ts",
     "eslintConfig": {

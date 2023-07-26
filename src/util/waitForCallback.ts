@@ -48,7 +48,7 @@ export const waitForCallback = async <
         tryIntervalMS = DEFAULT_TRY_INTERVAL_MS,
     }: Options<T> = {},
     n = 0,
-): Promise<ReturnType<T> | false> => {
+): Promise<Awaited<ReturnType<T>> | false> => {
     if (n === maxTryCount) {
         return false;
     }
@@ -67,3 +67,16 @@ export const waitForCallback = async <
         n + 1,
     );
 };
+
+async function example() {
+    const myF = () => new Promise<string>((res) => setTimeout(() => res('abc'), 1000));
+
+    const email = await waitForCallback(
+        // callback that needs to be awaited
+        myF,
+        {
+            maxTryCount: 10,
+            tryIntervalMS: 5000,
+        },
+    );
+}

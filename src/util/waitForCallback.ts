@@ -67,16 +67,3 @@ export const waitForCallback = async <
         n + 1,
     );
 };
-
-async function example() {
-    const myF = () => new Promise<string>((res) => setTimeout(() => res('abc'), 1000));
-
-    const email = await waitForCallback(
-        // callback that needs to be awaited
-        myF,
-        {
-            maxTryCount: 10,
-            tryIntervalMS: 5000,
-        },
-    );
-}

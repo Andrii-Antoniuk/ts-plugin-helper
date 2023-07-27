@@ -1,3 +1,6 @@
+import { ReactElement } from '@scandipwa/scandipwa/src/type/Common.type';
+import { JSXElementConstructor, ReactComponentElement } from 'react';
+
 /**
  * Automatically gets the types for member-function or member-property
  *
@@ -22,7 +25,6 @@
         return {myStuff: someStuff}; //It will accept only your type as return type, since you overrode it
     }
  */
-
 export type GetTypesFromMember<
     Inst,
     PropOrMethod extends keyof Inst,
@@ -43,11 +45,10 @@ export type GetTypesFromMemberF<
     instance: Inst
 ) => R;
 
-export type GetTypesFromMemberP<
-    Inst,
-    P extends keyof Inst,
-    R = Inst[P],
-> = (member: Inst[P], instance: Inst) => R;
+export type GetTypesFromMemberP<Inst, P extends keyof Inst, R = Inst[P]> = (
+    member: Inst[P],
+    instance: Inst
+) => R;
 /**
  * Gets the type for function
  *
@@ -73,3 +74,36 @@ export type GetTypesFromFunction<
     C = unknown,
     R = ReturnType<F>,
 > = (args: Parameters<F>, callback: F, context: C) => R;
+
+/**
+ * Validates if something is Class Component
+ */
+export type ValidateClassElement<E> = E extends Omit<
+ReactComponentElement<JSXElementConstructor<any>>,
+'key' | 'type'
+>
+    ? E
+    : never;
+
+/**
+ * Validates if something is FC Component
+ */
+export type ValidateFunctionalElement<E> = E extends (
+    props: any
+) => ReactElement
+    ? E
+    : never;
+
+/**
+ * Represents any Props
+ */
+export type Props = Record<PropertyKey, unknown> & { children?: ReactElement };
+
+/**
+ * Gets props for any React component
+ */
+export type GetProps<E extends any> = E extends ValidateClassElement<E>
+    ? E['props']
+    : E extends ValidateFunctionalElement<E>
+        ? Parameters<E>[0]
+        : never;

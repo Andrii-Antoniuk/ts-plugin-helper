@@ -4,19 +4,24 @@
 import { ReactElement } from '@scandipwa/scandipwa/src/type/Common.type';
 import { cloneElement, isValidElement } from 'react';
 
-type Props = Record<PropertyKey, unknown> & {children?: ReactElement};
+import {
+    GetProps,
+    Props,
+    ValidateClassElement,
+    ValidateFunctionalElement,
+} from '../types';
 
-interface Options<T> {
+interface Options<P> {
     /**
      * newProps will be shallowly merged with old props
      * @see https://react.dev/reference/react/cloneElement
      */
-    newProps?: T;
+    newProps?: Partial<P> & { children?: undefined };
     /**
      * Any valid ReactNode
      * @see https://react.dev/reference/react/isValidElement#react-elements-vs-react-nodes
      */
-    newChildren?: ReactElement;
+    newChildren?: any;
     mergeChildren?: boolean;
 }
 /**
@@ -44,27 +49,29 @@ interface Options<T> {
     });
 
  */
-export function cloneIfValidElement<T extends Props>(
-    element: ReactElement,
+export function cloneIfValidElement<E extends any, P extends Props>(
+    element: E extends ValidateClassElement<E>
+        ? E
+        : E extends ValidateFunctionalElement<E>
+            ? E
+            : any,
     {
         mergeChildren = true,
         newChildren,
         newProps,
-    }: Options<T> = {},
+    }: Options<P & GetProps<E>> = {},
 ) {
-    if (!isValidElement<T>(element)) {
+    if (!isValidElement<P>(element)) {
         return element;
     }
 
-    const {props: {children: prevChildren}} = element;
+    const {
+        props: { children: prevChildren },
+    } = element;
 
     const children = getChildren(newChildren, prevChildren, mergeChildren);
 
-    return cloneElement(
-        element,
-        newProps,
-        children,
-    );
+    return cloneElement(element, newProps, children);
 }
 
 function getChildren(
@@ -74,11 +81,11 @@ function getChildren(
 ): ReactElement {
     const isValidNode = isReactNode(newChildren);
 
-    if (!newChildren || !isValidNode){
+    if (!newChildren || !isValidNode) {
         return prevChildren;
     }
 
-    if (!mergeChildren){
+    if (!mergeChildren) {
         return newChildren;
     }
 
@@ -93,7 +100,7 @@ function getChildren(
  * Stolen from prop-types with removal of Symbol support:
  * @see https://github.com/facebook/prop-types/blob/main/factoryWithTypeCheckers.js#L474
  */
-export function isReactNode(element: unknown): boolean{
+export function isReactNode(element: unknown): element is ReactElement {
     switch (typeof element) {
     case 'number':
     case 'string':

@@ -9,5 +9,10 @@
     "readme": "ScandiPWA Typescript helper for plugins",
     "repository": {
         "url": "https://github.com/Andrii-Antoniuk/ts-plugin-helper"
+    },
+    "author": {
+        "name": "Andrii Antoniuk",
+        "email": "andrewantonuik@gmail.com",
+        "url": "https://github.com/Andrii-Antoniuk/"
     }
 }

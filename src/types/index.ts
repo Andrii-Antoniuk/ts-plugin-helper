@@ -1,5 +1,5 @@
 import { ReactElement } from '@scandipwa/scandipwa/src/type/Common.type';
-import { JSXElementConstructor, ReactComponentElement } from 'react';
+import { Component, JSXElementConstructor, ReactComponentElement } from 'react';
 
 /**
  * Automatically gets the types for member-function or member-property
@@ -107,3 +107,23 @@ export type GetProps<E extends any> = E extends ValidateClassElement<E>
     : E extends ValidateFunctionalElement<E>
         ? Parameters<E>[0]
         : never;
+
+/**
+ * Adds state to the class component and adds new state to it
+ */
+export type AddState<
+    C extends Component,
+    NS extends {},
+    S = NS & C['state'],
+> = Omit<C, 'setState' | 'state'> & {
+    state: S;
+    setState: <K extends keyof S>(
+        state:
+        | ((
+            prevState: Readonly<S>,
+            props: Readonly<C['props']>
+        ) => Pick<S, K> | S | null)
+        | (Pick<S, K> | S | null),
+        callback?: () => void
+    ) => void;
+};

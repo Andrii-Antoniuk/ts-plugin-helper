@@ -109,7 +109,7 @@ export type GetProps<E extends any> = E extends ValidateClassElement<E>
         : never;
 
 /**
- * Adds state to the class component and adds new state to it
+ * Adds state to the class component
  */
 export type AddState<
     C extends Component,
@@ -126,4 +126,11 @@ export type AddState<
         | (Pick<S, K> | S | null),
         callback?: () => void
     ) => void;
+};
+
+/**
+ * Adds props to class component
+ */
+export type AddProps<C extends Component, NP extends {}, P = NP & C['props']> = Omit<C, 'props'> & {
+    props: P;
 };

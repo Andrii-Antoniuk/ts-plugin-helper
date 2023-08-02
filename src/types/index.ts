@@ -1,6 +1,8 @@
 import { ReactElement } from '@scandipwa/scandipwa/src/type/Common.type';
 import { Component, JSXElementConstructor, ReactComponentElement } from 'react';
 
+type FilterUndefined<T> = Exclude<T, undefined>;
+
 /**
  * Automatically gets the types for member-function or member-property
  *
@@ -28,20 +30,20 @@ import { Component, JSXElementConstructor, ReactComponentElement } from 'react';
 export type GetTypesFromMember<
     Inst,
     PropOrMethod extends keyof Inst,
-    R = Inst[PropOrMethod] extends (...args: any[]) => any
-        ? ReturnType<Inst[PropOrMethod]>
+    R = FilterUndefined<Inst[PropOrMethod]> extends (...args: any[]) => any
+        ? ReturnType<FilterUndefined<Inst[PropOrMethod]>>
         : Inst[PropOrMethod],
-> = Inst[PropOrMethod] extends (...args: any[]) => any
-    ? GetTypesFromMemberF<Inst, PropOrMethod, R>
+> = FilterUndefined<Inst[PropOrMethod]> extends (...args: any[]) => any
+    ? GetTypesFromMemberF<Inst, FilterUndefined<PropOrMethod>, R>
     : GetTypesFromMemberP<Inst, PropOrMethod, R>;
 
 export type GetTypesFromMemberF<
     Inst,
     M extends keyof Inst,
-    R = Inst[M] extends (...args: any[]) => any ? ReturnType<Inst[M]> : never,
+    R = FilterUndefined<Inst[M]> extends (...args: any[]) => any ? ReturnType<FilterUndefined<Inst[M]>> : never,
 > = (
-    args: Inst[M] extends (...args: any[]) => any ? Parameters<Inst[M]> : never,
-    callback: Inst[M],
+    args: FilterUndefined<Inst[M]> extends (...args: any[]) => any ? Parameters<FilterUndefined<Inst[M]>> : never,
+    callback: FilterUndefined<Inst[M]>,
     instance: Inst
 ) => R;
 

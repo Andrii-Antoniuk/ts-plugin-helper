@@ -1,3 +1,4 @@
+/* eslint-disable @scandipwa/scandipwa-guidelines/export-level-one */
 import {
     Component,
     Consumer,
@@ -5,19 +6,11 @@ import {
     FC,
     PropsWithChildren,
     PureComponent,
-    ReactNode,
+    ReactElement,
 } from 'react';
+import ReactDOM from 'react-dom';
 
 import { cloneIfValidElement } from './cloneIfValidElement';
-
-/** @namespace tsPluginHelper/Util/WrapWithContext */
-export class MyComponent extends PureComponent<{ children: any }> {
-    render(): ReactNode {
-        const { children } = this.props;
-
-        return children;
-    }
-}
 
 type TProvider =
     | FC<PropsWithChildren<unknown>>
@@ -43,8 +36,42 @@ export const wrapWithContext = (
 export const ContextStuff = createContext({ foo: 'moo', bar: 'baz' });
 
 /** @namespace tsPluginHelper/Util/WrapWithContext/MyProvider */
-export const MyProvider = ({ children }: PropsWithChildren<{}>) => (
+export const MyProvider = ({ children }: PropsWithChildren<unknown>) => (
     <ContextStuff.Provider value={ { foo: 'moo', bar: 'baz' } }>
         { children }
     </ContextStuff.Provider>
 );
+
+const MyFComponent = (props: any) => {
+    console.log(props);
+
+    return <div>Hello</div>;
+};
+
+class MyComponent extends PureComponent {
+    render(): ReactElement {
+        console.log(this.props);
+
+        return <div>Class component</div>;
+    }
+}
+
+const ResultC = wrapWithContext(
+    <MyComponent />,
+    MyProvider,
+    ContextStuff.Consumer,
+);
+const ResultF = wrapWithContext(
+    <MyFComponent />,
+    MyProvider,
+    ContextStuff.Consumer,
+);
+
+const Results = () => (
+    <>
+        { ResultC }
+        { ResultF }
+    </>
+);
+
+ReactDOM.render(<Results />, document.body);
